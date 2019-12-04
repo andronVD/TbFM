@@ -1,8 +1,4 @@
-package nasaApi;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+package com.vdovich.tbfm.nasaAPI;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,8 +6,12 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
-@Controller
-@RequestMapping("/nasaApi")
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/nasa")
 public class NasaController {
 
     @GetMapping("/pictureOfTheDay")
