@@ -1,9 +1,11 @@
-package com.vdovich.tbfm;
+package com.vdovich.tbfm.api;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.vdovich.tbfm.domain.Greeting;
 
 import java.util.concurrent.atomic.AtomicLong;
 
