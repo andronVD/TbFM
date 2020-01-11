@@ -1,8 +1,10 @@
-package com.vdovich.tbfm;/* Created by user on 03.01.20 */
+package com.vdovich.tbfm.bot;/* Created by user on 03.01.20 */
 
 import com.vdovich.tbfm.service.INasaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -13,12 +15,25 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 
+@Component
 public class Bot extends TelegramLongPollingBot {
     private static String BOT_NAME = "SortingBot";
     private static String API_TOKEN = "908897882:AAHGta7UI5RmcP6w9di-vX465BIne0iTKIo";
+    
     @Autowired
     INasaService service;
+    
+    @PostConstruct
+    public void registerBot(){
+        TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
+        try {
+            telegramBotsApi.registerBot(this);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
 
     public SendMessage sendInlineKeyboard(long chatId) {
         SendPhoto photo = new SendPhoto().setChatId(chatId).setPhoto("https://telegram-bot-sdk.readme.io/reference#forwardmessage");
