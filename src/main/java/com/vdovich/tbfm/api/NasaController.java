@@ -24,4 +24,8 @@ public class NasaController {
     public void savePicture() {
 		nasaService.savePicture();
     }
+    @GetMapping("/mars")
+    public String getPictureFromMars(){
+        return nasaService.getPictureFromMars();
+    }
 }

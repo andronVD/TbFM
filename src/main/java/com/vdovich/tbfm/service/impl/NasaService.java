@@ -21,9 +21,12 @@ public class NasaService implements INasaService {
 
 	private static final Logger logger = LoggerFactory.getLogger(NasaService.class);
 
-	private static final String API_URL = "https://api.nasa.gov/planetary/apod";
+	private static final String API_URL = "https://api.nasa.gov";
+	private static final String APOD ="/planetary/apod";
+    private static final String MARS_ROVER_CURIOSITY ="/mars-photos/api/v1/rovers/curiosity/latest_photos";
 	private static final String API_KEY_QUERY_PARAM = "api_key";
 	private static final String DESTINATION_FILE = "/home/user/image.jpg";
+
 
 	@Value("${nasa.api.token}")
 	private String nasaApiToken;
@@ -33,13 +36,26 @@ public class NasaService implements INasaService {
 		InputStream inputStream;
 		String response = "";
 		try {
-			inputStream = new URL(API_URL + "?" + API_KEY_QUERY_PARAM + "=" + nasaApiToken).openStream();
+			inputStream = new URL(API_URL + APOD + "?" + API_KEY_QUERY_PARAM + "=" + nasaApiToken).openStream();
 			response = convertStreamToString(inputStream);
 		} catch (IOException e) {
 			return "not found";
 		}
 		return JsonParser.getPicture(response);
 	}
+
+	@Override
+    public String getPictureFromMars() {
+        InputStream inputStream;
+        String response = "";
+        try {
+            inputStream = new URL(API_URL + MARS_ROVER_CURIOSITY + "?" + API_KEY_QUERY_PARAM + "=" + nasaApiToken).openStream();
+            response = convertStreamToString(inputStream);
+        } catch (IOException e) {
+            return "not found";
+        }
+        return JsonParser.getPicture(response);
+    }
 
 	@Override
 	public void savePicture() {

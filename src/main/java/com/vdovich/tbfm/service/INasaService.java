@@ -4,4 +4,5 @@ public interface INasaService {
 	
 	String getPictureOfTheDay();
 	void savePicture();
+	String getPictureFromMars();
 }
