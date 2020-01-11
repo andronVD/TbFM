@@ -1,7 +1,10 @@
 package com.vdovich.tbfm;/* Created by user on 03.01.20 */
 
+import com.vdovich.tbfm.service.INasaService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -14,13 +17,15 @@ import java.util.List;
 public class Bot extends TelegramLongPollingBot {
     private static String BOT_NAME = "SortingBot";
     private static String API_TOKEN = "908897882:AAHGta7UI5RmcP6w9di-vX465BIne0iTKIo";
+    @Autowired
+    INasaService service;
 
-    public static SendMessage sendInlineKeyboard(long chatId) {
-
+    public SendMessage sendInlineKeyboard(long chatId) {
+        SendPhoto photo = new SendPhoto().setChatId(chatId).setPhoto("https://telegram-bot-sdk.readme.io/reference#forwardmessage");
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<InlineKeyboardButton>() {{
-            add(new InlineKeyboardButton().setText("Picture of the day").setCallbackData("you choose 1st button"));
+            add(new InlineKeyboardButton().setText("Picture of the day").setCallbackData("1"));
         }};
         List<InlineKeyboardButton> keyboardButtonsRow2 = new ArrayList<InlineKeyboardButton>() {{
             add(new InlineKeyboardButton().setText("Mars Rover Photos").setCallbackData("you choose 2nd button"));
@@ -50,14 +55,24 @@ public class Bot extends TelegramLongPollingBot {
                     e.printStackTrace();
                 }
             }
-        } else if (update.hasCallbackQuery()) {
+        }
+//        else if (update.hasCallbackQuery()) {
+//            try {
+//                execute(new SendMessage().setText(update.getCallbackQuery().getData()).setChatId(update
+//                        .getCallbackQuery().getMessage().getChatId()));
+//            } catch (TelegramApiException e) {
+//                e.printStackTrace();
+//            }
+//        }
+        else if (update.getCallbackQuery().getData().equals("1")) {
             try {
-                execute(new SendMessage().setText(update.getCallbackQuery().getData()).setChatId(update
+                execute(new SendPhoto().setPhoto(service.getPictureOfTheDay()).setChatId(update
                         .getCallbackQuery().getMessage().getChatId()));
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
         }
+
     }
 
     @Override
