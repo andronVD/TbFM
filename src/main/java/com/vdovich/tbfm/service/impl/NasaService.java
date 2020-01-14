@@ -49,7 +49,8 @@ public class NasaService implements INasaService {
         InputStream inputStream;
         String response = "";
         try {
-            inputStream = new URL(API_URL + MARS_ROVER_CURIOSITY + "?" + API_KEY_QUERY_PARAM + "=" + nasaApiToken).openStream();
+            inputStream = new URL(API_URL + MARS_ROVER_CURIOSITY + "?" + API_KEY_QUERY_PARAM + "=" + nasaApiToken)
+					.openStream();
             response = convertStreamToString(inputStream);
         } catch (IOException e) {
             return "not found";

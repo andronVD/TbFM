@@ -43,7 +43,7 @@ public class Bot extends TelegramLongPollingBot {
             add(new InlineKeyboardButton().setText("Picture of the day").setCallbackData("1"));
         }};
         List<InlineKeyboardButton> keyboardButtonsRow2 = new ArrayList<InlineKeyboardButton>() {{
-            add(new InlineKeyboardButton().setText("Mars Rover Photos").setCallbackData("you choose 2nd button"));
+            add(new InlineKeyboardButton().setText("Mars Rover Photos").setCallbackData("2"));
         }};
         List<InlineKeyboardButton> keyboardButtonsRow3 = new ArrayList<InlineKeyboardButton>() {{
             add(new InlineKeyboardButton().setText("Earth Polychromatic Imaging Camera").setCallbackData("you choose 3rd button"));
@@ -87,7 +87,14 @@ public class Bot extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
         }
-
+        else if (update.getCallbackQuery().getData().equals("2")) {
+            try {
+                execute(new SendPhoto().setPhoto(service.getPictureFromMars()).setChatId(update
+                        .getCallbackQuery().getMessage().getChatId()));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
