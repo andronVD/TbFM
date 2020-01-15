@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
 
-import com.vdovich.tbfm.util.JsonObjects;
+import com.vdovich.tbfm.util.JsonProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,7 +42,7 @@ public class NasaService implements INasaService {
         } catch (IOException e) {
             return "not found";
         }
-        return JsonParser.getPicture(response, JsonObjects.URL);
+        return JsonParser.getPicture(response, JsonProperty.URL);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class NasaService implements INasaService {
         } catch (IOException e) {
             return "not found";
         }
-        return JsonParser.getPicture(response, JsonObjects.IMR_SRC);
+        return JsonParser.getPicture(response, JsonProperty.IMG_SRC);
     }
 
     @Override

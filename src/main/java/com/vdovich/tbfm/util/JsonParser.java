@@ -6,21 +6,22 @@ import com.google.gson.JsonObject;
 
 public class JsonParser {
 
-    public static String getPicture(String response, JsonObjects jsonObject) {
+    public static String getPicture(String response, JsonProperty jsonProperty) {
         com.google.gson.JsonParser parser = new com.google.gson.JsonParser();
-        String src = "";
+
         JsonObject o = parser.parse(response).getAsJsonObject();
-        switch (jsonObject) {
+        switch (jsonProperty) {
             case URL:
-                src = o.get(jsonObject.getKey()).getAsString();
-                break;
-            case IMR_SRC:
+                return o.get(jsonProperty.getKey()).getAsString();
+            case IMG_SRC:
                 JsonArray arr = o.getAsJsonArray("latest_photos");
                 for (int i = 0; i < arr.size(); i++) {
-                    src = arr.get(i).getAsJsonObject().get(jsonObject.getKey()).getAsString();
+                    return arr.get(i).getAsJsonObject().get(jsonProperty.getKey()).getAsString();
                 }
+            default:
+                return null;
         }
-        return src;
+
     }
 }
 

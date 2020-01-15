@@ -11,9 +11,9 @@ import com.vdovich.tbfm.service.INasaService;
 @RestController
 @RequestMapping("/nasa")
 public class NasaController {
-	
-	@Autowired
-	private INasaService nasaService;
+
+    @Autowired
+    private INasaService nasaService;
 
     @GetMapping("/pictureOfTheDay")
     public String callNasaApi() {
@@ -22,10 +22,11 @@ public class NasaController {
 
     @GetMapping("/fullpicture")
     public void savePicture() {
-		nasaService.savePicture();
+        nasaService.savePicture();
     }
+
     @GetMapping("/mars")
-    public String getPictureFromMars(){
+    public String getPictureFromMars() {
         return nasaService.getPictureFromMars();
     }
 }

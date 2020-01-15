@@ -2,6 +2,7 @@ package com.vdovich.tbfm.bot;/* Created by user on 03.01.20 */
 
 import com.vdovich.tbfm.service.INasaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -19,14 +20,16 @@ import javax.annotation.PostConstruct;
 
 @Component
 public class Bot extends TelegramLongPollingBot {
-    private static String BOT_NAME = "SortingBot";
-    private static String API_TOKEN = "908897882:AAHGta7UI5RmcP6w9di-vX465BIne0iTKIo";
-    
+    @Value("${bot.name}")
+    private String botName;
+    @Value("${telegram.api.token}")
+    private String telegramApiToken;
+
     @Autowired
     INasaService service;
-    
+
     @PostConstruct
-    public void registerBot(){
+    public void registerBot() {
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
         try {
             telegramBotsApi.registerBot(this);
@@ -70,24 +73,14 @@ public class Bot extends TelegramLongPollingBot {
                     e.printStackTrace();
                 }
             }
-        }
-//        else if (update.hasCallbackQuery()) {
-//            try {
-//                execute(new SendMessage().setText(update.getCallbackQuery().getData()).setChatId(update
-//                        .getCallbackQuery().getMessage().getChatId()));
-//            } catch (TelegramApiException e) {
-//                e.printStackTrace();
-//            }
-//        }
-        else if (update.getCallbackQuery().getData().equals("1")) {
+        }        else if (update.getCallbackQuery().getData().equals("1")) {
             try {
                 execute(new SendPhoto().setPhoto(service.getPictureOfTheDay()).setChatId(update
                         .getCallbackQuery().getMessage().getChatId()));
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
-        }
-        else if (update.getCallbackQuery().getData().equals("2")) {
+        } else if (update.getCallbackQuery().getData().equals("2")) {
             try {
                 execute(new SendPhoto().setPhoto(service.getPictureFromMars()).setChatId(update
                         .getCallbackQuery().getMessage().getChatId()));
@@ -99,12 +92,12 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return BOT_NAME;
+        return botName;
     }
 
     @Override
     public String getBotToken() {
-        return API_TOKEN;
+        return telegramApiToken;
     }
 }
 

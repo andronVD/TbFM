@@ -1,10 +1,10 @@
 package com.vdovich.tbfm.util;/* Created by user on 15.01.20 */
 
-public enum JsonObjects {
-    URL("url"), IMR_SRC("img_src");
+public enum JsonProperty {
+    URL("url"), IMG_SRC("img_src");
     private String o;
 
-    JsonObjects(String o) {
+    JsonProperty(String o) {
         this.o = o;
     }
 
