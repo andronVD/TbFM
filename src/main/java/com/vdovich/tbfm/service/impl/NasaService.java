@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import com.vdovich.tbfm.util.JsonProperty;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import com.vdovich.tbfm.service.INasaService;
 import com.vdovich.tbfm.util.JsonParser;
-
 @Service
 public class NasaService implements INasaService {
 
@@ -33,35 +33,32 @@ public class NasaService implements INasaService {
     private String nasaApiToken;
 
     @Override
-    public String getPictureOfTheDay() {
+    public String sendPicture(URL url, JsonProperty jsonProperty) {
         InputStream inputStream;
         String response = "";
         try {
-            inputStream = new URL(API_URL + APOD + "?" + API_KEY_QUERY_PARAM + "=" + nasaApiToken).openStream();
+            inputStream = url.openStream();
             response = convertStreamToString(inputStream);
         } catch (IOException e) {
             return "not found";
         }
-        return JsonParser.getPicture(response, JsonProperty.URL);
+        return JsonParser.getPicture(response, jsonProperty);
+    }
+
+
+    @Override
+    public URL getPictureOfTheDay() throws MalformedURLException {
+        return new URL(API_URL + APOD + "?" + API_KEY_QUERY_PARAM + "=" + nasaApiToken);
     }
 
     @Override
-    public String getPictureFromMars() {
-        InputStream inputStream;
-        String response = "";
-        try {
-            inputStream = new URL(API_URL + MARS_ROVER_CURIOSITY + "?" + API_KEY_QUERY_PARAM + "=" + nasaApiToken)
-                    .openStream();
-            response = convertStreamToString(inputStream);
-        } catch (IOException e) {
-            return "not found";
-        }
-        return JsonParser.getPicture(response, JsonProperty.IMG_SRC);
+    public URL getPictureFromMars() throws MalformedURLException {
+        return new URL(API_URL + MARS_ROVER_CURIOSITY + "?" + API_KEY_QUERY_PARAM + "=" + nasaApiToken);
     }
 
     @Override
     public void savePicture() {
-        try (InputStream is = new URL(getPictureOfTheDay()).openStream();
+        try (InputStream is = getPictureOfTheDay().openStream();
              OutputStream os = new FileOutputStream(DESTINATION_FILE)) {
             byte[] b = new byte[2048];
             int length;
@@ -83,7 +80,6 @@ public class NasaService implements INasaService {
             sb.append(line).append("\n");
         }
         stream.close();
-
         return sb.toString();
     }
 

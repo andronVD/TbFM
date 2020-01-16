@@ -1,10 +1,16 @@
 package com.vdovich.tbfm.service;
 
-public interface INasaService {
+import com.vdovich.tbfm.util.JsonProperty;
 
-    String getPictureOfTheDay();
+import java.net.MalformedURLException;
+import java.net.URL;
+
+public interface INasaService {
+    String sendPicture(URL url, JsonProperty jsonProperty);
+
+    URL getPictureOfTheDay() throws MalformedURLException;
 
     void savePicture();
 
-    String getPictureFromMars();
+    URL getPictureFromMars() throws MalformedURLException;
 }
