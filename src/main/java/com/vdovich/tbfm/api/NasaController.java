@@ -1,14 +1,11 @@
 package com.vdovich.tbfm.api;
 
-import com.vdovich.tbfm.util.JsonProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vdovich.tbfm.service.INasaService;
-
-import java.net.MalformedURLException;
 
 
 @RestController
@@ -19,8 +16,8 @@ public class NasaController {
     private INasaService nasaService;
 
     @GetMapping("/pictureOfTheDay")
-    public String callNasaApi() throws MalformedURLException {
-        return nasaService.sendPicture(nasaService.getPictureOfTheDay(), JsonProperty.URL);
+    public String callNasaApi() {
+        return nasaService.getPictureOfTheDay();
     }
 
     @GetMapping("/fullpicture")
@@ -29,7 +26,8 @@ public class NasaController {
     }
 
     @GetMapping("/mars")
-    public String getPictureFromMars() throws MalformedURLException {
-        return nasaService.sendPicture(nasaService.getPictureFromMars(), JsonProperty.IMG_SRC);
+    public String getPictureFromMars() {
+        return nasaService.getPictureFromMars()
+;
     }
 }

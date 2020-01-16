@@ -1,7 +1,13 @@
 package com.vdovich.tbfm.bot;/* Created by user on 03.01.20 */
 
-import com.vdovich.tbfm.service.INasaService;
-import com.vdovich.tbfm.util.ApiKeyWord;
+import static com.vdovich.tbfm.util.ApiKeyWord.PHOTO_FROM_MARS_ROVER;
+import static com.vdovich.tbfm.util.ApiKeyWord.PICTURE_OF_THE_DAY;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -14,19 +20,14 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
+import com.vdovich.tbfm.service.INasaService;
 
 @Component
 public class Bot extends TelegramLongPollingBot {
-    @Value("${telegram.api.name}")
+    @Value("${telegram.bot.name}")
     private String botName;
     @Value("${telegram.api.token}")
     private String telegramApiToken;
-
-    ApiKeyWord apiKeyWord;
 
     @Autowired
     INasaService service;
@@ -46,13 +47,13 @@ public class Bot extends TelegramLongPollingBot {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<InlineKeyboardButton>() {{
-            add(new InlineKeyboardButton().setText("Picture of the day").setCallbackData(apiKeyWord.PICTURE_OF_THE_DAT.getKeyWord()));
+            add(new InlineKeyboardButton().setText("Picture of the day").setCallbackData(PICTURE_OF_THE_DAY.toString()));
         }};
         List<InlineKeyboardButton> keyboardButtonsRow2 = new ArrayList<InlineKeyboardButton>() {{
             add(new InlineKeyboardButton().setText("Mars Rover Photos").setCallbackData("2"));
         }};
         List<InlineKeyboardButton> keyboardButtonsRow3 = new ArrayList<InlineKeyboardButton>() {{
-            add(new InlineKeyboardButton().setText("Earth Polychromatic Imaging Camera").setCallbackData(apiKeyWord.PHOTO_FROM_MARS_ROVER.getKeyWord()));
+            add(new InlineKeyboardButton().setText("Earth Polychromatic Imaging Camera").setCallbackData(PHOTO_FROM_MARS_ROVER.toString()));
         }};
         List<List<InlineKeyboardButton>> rowList = new ArrayList<List<InlineKeyboardButton>>() {{
             add(keyboardButtonsRow1);
@@ -76,14 +77,14 @@ public class Bot extends TelegramLongPollingBot {
                     e.printStackTrace();
                 }
             }
-        } else if (update.getCallbackQuery().getData().equals(apiKeyWord.PICTURE_OF_THE_DAT.getKeyWord())) {
+        } else if (update.getCallbackQuery().getData().equals(PICTURE_OF_THE_DAY.toString())) {
             try {
                 execute(new SendPhoto().setPhoto(service.getPictureOfTheDay()).setChatId(update
                         .getCallbackQuery().getMessage().getChatId()));
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
-        } else if (update.getCallbackQuery().getData().equals(apiKeyWord.PHOTO_FROM_MARS_ROVER.getKeyWord())) {
+        } else if (update.getCallbackQuery().getData().equals(PHOTO_FROM_MARS_ROVER.toString())) {
             try {
                 execute(new SendPhoto().setPhoto(service.getPictureFromMars()).setChatId(update
                         .getCallbackQuery().getMessage().getChatId()));
