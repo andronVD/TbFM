@@ -1,6 +1,7 @@
 package com.vdovich.tbfm.bot;/* Created by user on 03.01.20 */
 
 import com.vdovich.tbfm.service.INasaService;
+import com.vdovich.tbfm.util.ApiKeyWord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -20,10 +21,12 @@ import javax.annotation.PostConstruct;
 
 @Component
 public class Bot extends TelegramLongPollingBot {
-    @Value("${bot.name}")
+    @Value("${telegram.api.name}")
     private String botName;
     @Value("${telegram.api.token}")
     private String telegramApiToken;
+
+    ApiKeyWord apiKeyWord;
 
     @Autowired
     INasaService service;
@@ -43,13 +46,13 @@ public class Bot extends TelegramLongPollingBot {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<InlineKeyboardButton>() {{
-            add(new InlineKeyboardButton().setText("Picture of the day").setCallbackData("1"));
+            add(new InlineKeyboardButton().setText("Picture of the day").setCallbackData(apiKeyWord.PICTURE_OF_THE_DAT.getKeyWord()));
         }};
         List<InlineKeyboardButton> keyboardButtonsRow2 = new ArrayList<InlineKeyboardButton>() {{
             add(new InlineKeyboardButton().setText("Mars Rover Photos").setCallbackData("2"));
         }};
         List<InlineKeyboardButton> keyboardButtonsRow3 = new ArrayList<InlineKeyboardButton>() {{
-            add(new InlineKeyboardButton().setText("Earth Polychromatic Imaging Camera").setCallbackData("you choose 3rd button"));
+            add(new InlineKeyboardButton().setText("Earth Polychromatic Imaging Camera").setCallbackData(apiKeyWord.PHOTO_FROM_MARS_ROVER.getKeyWord()));
         }};
         List<List<InlineKeyboardButton>> rowList = new ArrayList<List<InlineKeyboardButton>>() {{
             add(keyboardButtonsRow1);
@@ -73,14 +76,14 @@ public class Bot extends TelegramLongPollingBot {
                     e.printStackTrace();
                 }
             }
-        }        else if (update.getCallbackQuery().getData().equals("1")) {
+        } else if (update.getCallbackQuery().getData().equals(apiKeyWord.PICTURE_OF_THE_DAT.getKeyWord())) {
             try {
                 execute(new SendPhoto().setPhoto(service.getPictureOfTheDay()).setChatId(update
                         .getCallbackQuery().getMessage().getChatId()));
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
-        } else if (update.getCallbackQuery().getData().equals("2")) {
+        } else if (update.getCallbackQuery().getData().equals(apiKeyWord.PHOTO_FROM_MARS_ROVER.getKeyWord())) {
             try {
                 execute(new SendPhoto().setPhoto(service.getPictureFromMars()).setChatId(update
                         .getCallbackQuery().getMessage().getChatId()));
