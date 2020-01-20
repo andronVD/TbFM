@@ -3,6 +3,7 @@ package com.vdovich.tbfm.util;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import org.apache.commons.lang3.StringUtils;
 
 public class JsonParser {
 
@@ -19,7 +20,7 @@ public class JsonParser {
                     return arr.get(i).getAsJsonObject().get(jsonProperty.getKey()).getAsString();
                 }
             default:
-                return null;
+                return StringUtils.EMPTY;
         }
 
     }
