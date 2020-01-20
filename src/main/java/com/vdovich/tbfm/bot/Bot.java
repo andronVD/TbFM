@@ -52,13 +52,10 @@ public class Bot extends TelegramLongPollingBot {
         List<InlineKeyboardButton> keyboardButtonsRow2 = new ArrayList<InlineKeyboardButton>() {{
             add(new InlineKeyboardButton().setText("Mars Rover Photos").setCallbackData(PHOTO_FROM_MARS_ROVER.toString()));
         }};
-        List<InlineKeyboardButton> keyboardButtonsRow3 = new ArrayList<InlineKeyboardButton>() {{
-            add(new InlineKeyboardButton().setText("Earth Polychromatic Imaging Camera").setCallbackData("3"));
-        }};
+
         List<List<InlineKeyboardButton>> rowList = new ArrayList<List<InlineKeyboardButton>>() {{
             add(keyboardButtonsRow1);
             add(keyboardButtonsRow2);
-            add(keyboardButtonsRow3);
         }};
         inlineKeyboardMarkup.setKeyboard(rowList);
         SendMessage message = new SendMessage()

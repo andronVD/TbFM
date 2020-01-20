@@ -27,40 +27,40 @@ public class NasaService implements INasaService {
     private static final String APOD = "/planetary/apod";
     private static final String MARS_ROVER_CURIOSITY = "/mars-photos/api/v1/rovers/curiosity/latest_photos";
     private static final String DESTINATION_FILE = "/home/user/image.jpg";
-    
+
     @Value("${nasa.api.token}")
     private String nasaApiToken;
 
     @Override
     public String getPictureOfTheDay() {
-    	String url = buildNasaUrl(APOD);
+        String url = buildNasaUrl(APOD);
         return sendPicture(url, JsonProperty.URL);
     }
 
     @Override
     public String getPictureFromMars() {
-    	String url = buildNasaUrl(MARS_ROVER_CURIOSITY);
+        String url = buildNasaUrl(MARS_ROVER_CURIOSITY);
         return sendPicture(url, JsonProperty.IMG_SRC);
     }
 
-	@Override
-	public void savePicture() {
-		try (InputStream is = new URL(getPictureOfTheDay()).openStream();
-				OutputStream os = new FileOutputStream(DESTINATION_FILE)) {
-			byte[] b = new byte[2048];
-			int length;
-			while ((length = is.read(b)) != 1) {
-				os.write(b, 0, length);
-			}
-		} catch (IOException e) {
-			logger.error("Something went wrong..");
-		}
-	}
-    
+    @Override
+    public void savePicture() {
+        try (InputStream is = new URL(getPictureOfTheDay()).openStream();
+             OutputStream os = new FileOutputStream(DESTINATION_FILE)) {
+            byte[] b = new byte[2048];
+            int length;
+            while ((length = is.read(b)) != 1) {
+                os.write(b, 0, length);
+            }
+        } catch (IOException e) {
+            logger.error("Something went wrong..");
+        }
+    }
+
     /*
      *
-     *  private section 
-     * 
+     *  private section
+     *
      */
     private String sendPicture(String url, JsonProperty jsonProperty) {
         String response = "";
@@ -68,24 +68,24 @@ public class NasaService implements INasaService {
             response = convertStreamToString(is);
             return JsonParser.getPicture(response, jsonProperty);
         } catch (IOException e) {
-        	logger.error("Couldn't read response from url: " + url);
+            logger.error("Couldn't read response from url: " + url);
         }
         return StringUtils.EMPTY;
     }
 
-	private String convertStreamToString(InputStream stream) throws IOException {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-		StringBuilder sb = new StringBuilder();
+    private String convertStreamToString(InputStream stream) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+        StringBuilder sb = new StringBuilder();
 
-		String line;
-		while ((line = reader.readLine()) != null) {
-			sb.append(line).append("\n");
-		}
-		return sb.toString();
-	}
-	
-	private String buildNasaUrl(String pathRequest) {
-		return String.format(API_URL, pathRequest, nasaApiToken);
-	}
+        String line;
+        while ((line = reader.readLine()) != null) {
+            sb.append(line).append("\n");
+        }
+        return sb.toString();
+    }
+
+    private String buildNasaUrl(String pathRequest) {
+        return String.format(API_URL, pathRequest, nasaApiToken);
+    }
 
 }
