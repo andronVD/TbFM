@@ -77,7 +77,7 @@ public class Bot extends TelegramLongPollingBot {
         } else if (update.getCallbackQuery().getData().equals(PICTURE_OF_THE_DAY.toString())) {
             try {
                 execute(new SendPhoto().setPhoto(service.getPictureOfTheDay()).setChatId(update
-                        .getCallbackQuery().getMessage().getChatId()));
+                        .getCallbackQuery().getMessage().getChatId()).setCaption(service.getTextOfPictureOfTheDay()));
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }

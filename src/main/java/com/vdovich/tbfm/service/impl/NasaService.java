@@ -36,6 +36,10 @@ public class NasaService implements INasaService {
         String url = buildNasaUrl(APOD);
         return sendPicture(url, JsonProperty.URL);
     }
+    public String getTextOfPictureOfTheDay(){
+        String url = buildNasaUrl(APOD);
+        return sendPicture(url,JsonProperty.EXPLANATION);
+    }
 
     @Override
     public String getPictureFromMars() {

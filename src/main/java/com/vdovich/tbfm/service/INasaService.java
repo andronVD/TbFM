@@ -7,5 +7,7 @@ public interface INasaService {
     void savePicture();
 
     String getPictureFromMars();
-    
+
+    String getTextOfPictureOfTheDay();
+
 }

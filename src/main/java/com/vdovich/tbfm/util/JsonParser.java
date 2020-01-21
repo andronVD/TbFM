@@ -12,6 +12,15 @@ public class JsonParser {
 
         JsonObject o = parser.parse(response).getAsJsonObject();
         switch (jsonProperty) {
+            case EXPLANATION:
+                String explanation = o.get(JsonProperty.EXPLANATION.getKey()).getAsString();
+                for (int i = 0; i < explanation.length(); i++) {
+                    if (explanation.charAt(i) == '.' && i < 700) {
+                        return explanation = explanation.substring(0, i + 1);
+                    } else if (i > 300) {
+                        return explanation = "Explanation is too long, sorry!";
+                    }
+                }
             case URL:
                 return o.get(jsonProperty.getKey()).getAsString();
             case IMG_SRC:
