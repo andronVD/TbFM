@@ -1,13 +1,17 @@
 package com.vdovich.tbfm.service;
 
+import com.vdovich.tbfm.util.JsonProperty;
+
+import java.util.Map;
+
 public interface INasaService {
 
-	String getPictureOfTheDay();
+    Map<JsonProperty, String> getPictureOfTheDay();
 
     void savePicture();
 
-    String getPictureFromMars();
+    Map<JsonProperty, String> getPictureFromMars();
 
-    String getTextOfPictureOfTheDay();
+    Map<JsonProperty, String> getTextOfPictureOfTheDay();
 
 }

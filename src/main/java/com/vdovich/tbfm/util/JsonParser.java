@@ -3,33 +3,39 @@ package com.vdovich.tbfm.util;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import org.apache.commons.lang3.StringUtils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class JsonParser {
 
-    public static String getPicture(String response, JsonProperty jsonProperty) {
+    public static Map<JsonProperty, String> getPicture(String response, JsonProperty jsonProperty) {
         com.google.gson.JsonParser parser = new com.google.gson.JsonParser();
+        Map<JsonProperty, String> stringsEntity = new HashMap<>();
 
         JsonObject o = parser.parse(response).getAsJsonObject();
         switch (jsonProperty) {
-            case EXPLANATION:
+            case URL:
+                String url = o.get(jsonProperty.getKey()).getAsString();
+                stringsEntity.put(JsonProperty.URL, url);
                 String explanation = o.get(JsonProperty.EXPLANATION.getKey()).getAsString();
                 for (int i = 0; i < explanation.length(); i++) {
                     if (explanation.charAt(i) == '.' && i < 700) {
-                        return explanation = explanation.substring(0, i + 1);
+                        stringsEntity.put(JsonProperty.EXPLANATION, explanation.substring(0, i + 1));
+                        break;
                     } else if (i > 300) {
-                        return explanation = "Explanation is too long, sorry!";
+                        stringsEntity.put(JsonProperty.EXPLANATION, "Explanation is too long, sorry!");
+                        break;
                     }
                 }
-            case URL:
-                return o.get(jsonProperty.getKey()).getAsString();
+                return stringsEntity;
             case IMG_SRC:
                 JsonArray arr = o.getAsJsonArray("latest_photos");
                 for (int i = 0; i < arr.size(); i++) {
-                    return arr.get(i).getAsJsonObject().get(jsonProperty.getKey()).getAsString();
+                    stringsEntity.put(JsonProperty.IMG_SRC, arr.get(i).getAsJsonObject().get(jsonProperty.getKey()).getAsString());
                 }
             default:
-                return StringUtils.EMPTY;
+                return null;
         }
 
     }

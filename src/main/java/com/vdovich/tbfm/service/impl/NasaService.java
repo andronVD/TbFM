@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -32,33 +33,33 @@ public class NasaService implements INasaService {
     private String nasaApiToken;
 
     @Override
-    public String getPictureOfTheDay() {
+    public Map<JsonProperty, String> getPictureOfTheDay() {
         String url = buildNasaUrl(APOD);
         return sendPicture(url, JsonProperty.URL);
     }
-    public String getTextOfPictureOfTheDay(){
+    public Map<JsonProperty, String> getTextOfPictureOfTheDay(){
         String url = buildNasaUrl(APOD);
         return sendPicture(url,JsonProperty.EXPLANATION);
     }
 
     @Override
-    public String getPictureFromMars() {
+    public Map<JsonProperty, String> getPictureFromMars() {
         String url = buildNasaUrl(MARS_ROVER_CURIOSITY);
         return sendPicture(url, JsonProperty.IMG_SRC);
     }
 
     @Override
     public void savePicture() {
-        try (InputStream is = new URL(getPictureOfTheDay()).openStream();
-             OutputStream os = new FileOutputStream(DESTINATION_FILE)) {
-            byte[] b = new byte[2048];
-            int length;
-            while ((length = is.read(b)) != 1) {
-                os.write(b, 0, length);
-            }
-        } catch (IOException e) {
-            logger.error("Something went wrong..");
-        }
+//        try (InputStream is = new URL(getPictureOfTheDay()).openStream();
+//             OutputStream os = new FileOutputStream(DESTINATION_FILE)) {
+//            byte[] b = new byte[2048];
+//            int length;
+//            while ((length = is.read(b)) != 1) {
+//                os.write(b, 0, length);
+//            }
+//        } catch (IOException e) {
+//            logger.error("Something went wrong..");
+//        }
     }
 
     /*
@@ -66,7 +67,7 @@ public class NasaService implements INasaService {
      *  private section
      *
      */
-    private String sendPicture(String url, JsonProperty jsonProperty) {
+    private Map<JsonProperty, String> sendPicture(String url, JsonProperty jsonProperty) {
         String response = "";
         try (InputStream is = new URL(url).openStream()) {
             response = convertStreamToString(is);
@@ -74,7 +75,7 @@ public class NasaService implements INasaService {
         } catch (IOException e) {
             logger.error("Couldn't read response from url: " + url);
         }
-        return StringUtils.EMPTY;
+        return null;
     }
 
     private String convertStreamToString(InputStream stream) throws IOException {

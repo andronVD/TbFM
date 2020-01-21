@@ -5,9 +5,11 @@ import static com.vdovich.tbfm.util.ApiKeyWord.PICTURE_OF_THE_DAY;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import com.vdovich.tbfm.util.JsonProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -76,14 +78,16 @@ public class Bot extends TelegramLongPollingBot {
             }
         } else if (update.getCallbackQuery().getData().equals(PICTURE_OF_THE_DAY.toString())) {
             try {
-                execute(new SendPhoto().setPhoto(service.getPictureOfTheDay()).setChatId(update
-                        .getCallbackQuery().getMessage().getChatId()).setCaption(service.getTextOfPictureOfTheDay()));
+                Map<JsonProperty, String> result = service.getPictureOfTheDay();
+                execute(new SendPhoto().setPhoto(result.get(JsonProperty.URL)).setChatId(update
+                        .getCallbackQuery().getMessage().getChatId()).setCaption(result.get(JsonProperty.EXPLANATION)));
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
         } else if (update.getCallbackQuery().getData().equals(PHOTO_FROM_MARS_ROVER.toString())) {
             try {
-                execute(new SendPhoto().setPhoto(service.getPictureFromMars()).setChatId(update
+                Map<JsonProperty, String> result = service.getPictureFromMars();
+                execute(new SendPhoto().setPhoto(result.get(JsonProperty.IMG_SRC)).setChatId(update
                         .getCallbackQuery().getMessage().getChatId()));
             } catch (TelegramApiException e) {
                 e.printStackTrace();

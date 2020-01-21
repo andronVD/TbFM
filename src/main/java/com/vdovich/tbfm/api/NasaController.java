@@ -1,11 +1,14 @@
 package com.vdovich.tbfm.api;
 
+import com.vdovich.tbfm.util.JsonProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vdovich.tbfm.service.INasaService;
+
+import java.util.Map;
 
 
 @RestController
@@ -16,7 +19,7 @@ public class NasaController {
     private INasaService nasaService;
 
     @GetMapping("/pictureOfTheDay")
-    public String callNasaApi() {
+    public Map<JsonProperty, String> callNasaApi() {
         return nasaService.getPictureOfTheDay();
     }
 
@@ -26,7 +29,7 @@ public class NasaController {
     }
 
     @GetMapping("/mars")
-    public String getPictureFromMars() {
+    public Map<JsonProperty, String> getPictureFromMars() {
         return nasaService.getPictureFromMars();
     }
 }
