@@ -32,8 +32,11 @@ public class JsonParser {
             case IMG_SRC:
                 JsonArray arr = o.getAsJsonArray("latest_photos");
                 for (int i = 0; i < arr.size(); i++) {
-                    stringsEntity.put(JsonProperty.IMG_SRC, arr.get(i).getAsJsonObject().get(jsonProperty.getKey()).getAsString());
+                    String image = arr.get(i).getAsJsonObject().get(jsonProperty.getKey()).getAsString();
+                    stringsEntity.put(JsonProperty.IMG_SRC, image);
+                    break;
                 }
+                return stringsEntity;
             default:
                 return null;
         }
